@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">HealthCare</string>
+    <string name="title_health">健康数据</string>
+    <string name="title_smartdev">智能设备</string>
+    <string name="title_contact">紧急联系</string>
+    <string name="title_about">我的信息</string>
+</resources>
