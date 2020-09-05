@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -38,6 +39,7 @@ public class connViaBluetooth extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     // 新发现设备列表
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
+    public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class connViaBluetooth extends AppCompatActivity {
         // Find and set up the ListView for newly discovered devices
         ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
+        newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -73,8 +76,7 @@ public class connViaBluetooth extends AppCompatActivity {
             Intent enableIntent = new Intent(
                     BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        } else{
-            Toast.makeText(this, "Test:Bluetooth open", Toast.LENGTH_SHORT).show();
+            doDiscovery();
         }
 
         doDiscovery();
@@ -87,7 +89,6 @@ public class connViaBluetooth extends AppCompatActivity {
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         this.registerReceiver(mReceiver, filter);
 
-
     }
 
 
@@ -98,9 +99,6 @@ public class connViaBluetooth extends AppCompatActivity {
         // Indicate scanning in the title
         setProgressBarIndeterminateVisibility(true);
         setTitle("正在搜寻");
-
-        setProgressBarIndeterminateVisibility(true);
-
         // If we're already discovering, stop it
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
@@ -109,6 +107,30 @@ public class connViaBluetooth extends AppCompatActivity {
         // Request discover from BluetoothAdapter
         mBluetoothAdapter.startDiscovery();
     }
+
+    /**
+     * The on-click listener for all devices in the ListViews
+     */
+    private AdapterView.OnItemClickListener mDeviceClickListener
+            = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
+            // Cancel discovery because it's costly and we're about to connect
+            mBluetoothAdapter.cancelDiscovery();
+
+            // Get the device MAC address, which is the last 17 chars in the View
+            String info = ((TextView) v).getText().toString();
+            String address = info.substring(info.length() - 17);
+
+            // Create the result Intent and include the MAC address
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+
+            Toast.makeText(connViaBluetooth.this, address, Toast.LENGTH_SHORT).show();
+            // Set result and finish this Activity
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
+    };
 
     /**
      * The BroadcastReceiver that listens for discovered devices and changes the title when

@@ -10,8 +10,8 @@
         android:id="@+id/title1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
         android:text="@string/title_health"
         android:textColor="#000000"
         android:textSize="40sp"
@@ -38,18 +38,35 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="16dp"
+                            android:text="血压"
+                            android:textColor="@color/colorTextSelected"
+                            android:textSize="20sp" />
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="16dp"
-                        android:text="血压"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
+                        android:gravity="center_horizontal"
+                        android:paddingTop="20dp"
+                        android:text="116/83mmHg"
+                        android:textColor="#000000"
+                        android:textSize="40dp"
+                        android:typeface="monospace" />
 
                 </LinearLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -63,19 +80,34 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="16dp"
+                            android:text="心率"
+                            android:textColor="@color/colorTextSelected"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="16dp"
-                        android:text="血糖"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
-
+                        android:gravity="center_horizontal"
+                        android:paddingTop="20dp"
+                        android:text="62次/分"
+                        android:textColor="#000000"
+                        android:textSize="40dp"
+                        android:typeface="monospace" />
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -106,8 +138,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="30dp"
                 android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="190dp"
                 android:background="@color/colorWhite"
@@ -123,7 +155,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="16dp"
-                        android:text="心率"
+                        android:text="血糖"
                         android:textColor="@color/colorTextSelected"
                         android:textSize="20dp" />
 
