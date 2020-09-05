@@ -9,44 +9,65 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
+import bupt.mxly.healthcare.db.DBAdapter;
 import bupt.mxly.healthcare.db.UserInfo;
 
-public class MainActivity extends AppCompatActivity {
-
+public class LoginActivity extends AppCompatActivity {
+    EditText phone_login;
+    EditText pwd_login;
+    Button bt_login;
+    TextView login_result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        setContentView(R.layout.login);
+        phone_login = (EditText)findViewById(R.id.phone_login);
+        pwd_login = (EditText)findViewById(R.id.pwd_login);
+        bt_login = (Button)findViewById(R.id.bt_login);
+        login_result=(TextView)findViewById(R.id.login_result);
 
         setStatusBarFullTransparent();
         setFitSystemWindow(true);
         setStatusBarLightMode(this, true);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_health, R.id.navigation_smartdev, R.id.navigation_contact, R.id.navigation_about)
-                .build();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+    }
+    @Override
+    protected void onStart() {
+        final RC4 rc4 = new RC4();
+        //rc4算法初始化
+        rc4.key="WhQpVccuUyCblNuSmk6NXE3INAICmKdJpTFQUd5jYUSTg0thV58Kqrjk1KaLq0xZbJqAjhmr5lFzgCrbh4U6j2p5NarTW02YDv4QxkqhjbbH5SdzXuNt5xU4pEYHnM9Wkg34Sa1OU9zCNZk1tefeDrfBNR6419n3QdBPcESkJcXcsUzHws0gHDpHRzqPI0KRJd5s58Zc8vgQYFuT6GpWLbdrgOoV74Yj5mroMyGFW6DhMT8anvWRZLiFtWrbfR8d".toCharArray();
+        rc4.initSbox();
+        super.onStart();
 
-//        Intent intent=getIntent();
-//        if(intent!=null){
-//            UserInfo userInfo= (UserInfo)intent.getSerializableExtra("userinfo");
-//            if(userInfo!=null){
-//                System.out.println(userInfo.getName());
-//            }
-//        }
+        bt_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                DBAdapter db = new DBAdapter();
+
+                UserInfo userinf = db.queryUserInfo(phone_login.getText().toString());
+                String correctpwd = rc4.crypt(userinf.getPwd());
+                String pwd = pwd_login.getText().toString();
+                if(correctpwd.equals(pwd)){
+//                    login_result.setText("登录成功");
+
+                    Intent intent=new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("userinfo",userinf);
+                    //startActivity(intent);
+                    setResult(1,intent);
+                    finish();
+                }
+                else{
+                    login_result.setText("登录失败");
+                }
+            }
+        });
     }
 
     /**
@@ -97,5 +118,4 @@ public class MainActivity extends AppCompatActivity {
             window.getDecorView().setSystemUiVisibility(option);
         }
     }
-
 }
