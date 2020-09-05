@@ -12,14 +12,19 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
+import android.os.Messenger;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +33,11 @@ import bupt.mxly.healthcare.R;
 public class connViaBluetooth extends AppCompatActivity {
 
     Button btn_back;
-    private final static int REQUEST_ENABLE_BT = 1;
+    private final static int REQUEST_ENABLE_BT = 1; //用于打开手机蓝牙
+    private final static int HEALTH_PROFILE_SOURCE_DATA_TYPE = 0x1007; //IEEE血压数据类型
+    private BluetoothAdapter mBluetoothAdapter;
+    // 新发现设备列表
+    private ArrayAdapter<String> mNewDevicesArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,99 @@ public class connViaBluetooth extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+
+        // Find and set up the ListView for newly discovered devices
+        ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
+        newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if(mBluetoothAdapter == null) {
+            Toast.makeText(this, "当前设备不支持蓝牙！", Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
+
+        if(!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        } else{
+            Toast.makeText(this, "Test:Bluetooth open", Toast.LENGTH_SHORT).show();
+        }
+
+        doDiscovery();
+
+        // Register for broadcasts when a device is discovered.
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        this.registerReceiver(mReceiver, filter);
+
+        // Register for broadcasts when discovery has finished
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        this.registerReceiver(mReceiver, filter);
+
+
+    }
+
+
+    /**
+     * Start device discover with the BluetoothAdapter
+     */
+    private void doDiscovery() {
+        // Indicate scanning in the title
+        setProgressBarIndeterminateVisibility(true);
+        setTitle("正在搜寻");
+
+        setProgressBarIndeterminateVisibility(true);
+
+        // If we're already discovering, stop it
+        if (mBluetoothAdapter.isDiscovering()) {
+            mBluetoothAdapter.cancelDiscovery();
+        }
+
+        // Request discover from BluetoothAdapter
+        mBluetoothAdapter.startDiscovery();
+    }
+
+    /**
+     * The BroadcastReceiver that listens for discovered devices and changes the title when
+     * discovery is finished
+     */
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            // When discovery finds a device
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Get the BluetoothDevice object from the Intent
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                // If it's already paired, skip it, because it's been listed already
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                }
+                // When discovery is finished, change the Activity title
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                setProgressBarIndeterminateVisibility(false);
+                setTitle("选择需要连接的设备");
+                if (mNewDevicesArrayAdapter.getCount() == 0) {
+                    //String noDevices = getResources().getText(R.string.none_found).toString();
+                    mNewDevicesArrayAdapter.add("No device found");
+                }
+            }
+        }
+    };
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mBluetoothAdapter!=null){
+            mBluetoothAdapter.cancelDiscovery();
+        }
+        // Don't forget to unregister the ACTION_FOUND receiver.
+        unregisterReceiver(mReceiver);
     }
 
     /**
