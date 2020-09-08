@@ -1,17 +1,28 @@
 package bupt.mxly.healthcare.connect;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
@@ -26,13 +37,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingerth.supdialogutils.SYSDiaLogUtils;
+
+import java.lang.reflect.Method;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import bupt.mxly.healthcare.MainActivity;
 import bupt.mxly.healthcare.R;
+import bupt.mxly.healthcare.addDevice;
 
 public class connViaBluetooth extends AppCompatActivity {
 
+    private static final String TAG = "error";
     Button btn_back;
     private final static int REQUEST_ENABLE_BT = 1; //用于打开手机蓝牙
     private final static int HEALTH_PROFILE_SOURCE_DATA_TYPE = 0x1007; //IEEE血压数据类型
@@ -40,6 +62,12 @@ public class connViaBluetooth extends AppCompatActivity {
     // 新发现设备列表
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
+
+    private BluetoothSocket mBluetoothSocket;
+
+    private String mConnectedDeviceName = null;
+
+    private BluetoothChatService mChatService = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +78,8 @@ public class connViaBluetooth extends AppCompatActivity {
         setFitSystemWindow(true);
         setStatusBarLightMode(this, true);
 
+        getPermission();
+
         btn_back = findViewById(R.id.btn_back2addDev);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +88,19 @@ public class connViaBluetooth extends AppCompatActivity {
             }
         });
 
+        // Initialize array adapters. One for already paired devices and
+        // one for newly discovered devices
+        ArrayAdapter<String> pairedDevicesArrayAdapter =
+                new ArrayAdapter<String>(this, R.layout.device_name);
         mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+
+        // Initialize the BluetoothChatService to perform bluetooth connections
+        mChatService = new BluetoothChatService(this, mHandler);
+
+        // Find and set up the ListView for paired devices
+        ListView pairedListView = (ListView) findViewById(R.id.old_devices);
+        pairedListView.setAdapter(pairedDevicesArrayAdapter);
+        pairedListView.setOnItemClickListener(mDeviceClickListener);
 
         // Find and set up the ListView for newly discovered devices
         ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
@@ -67,12 +109,26 @@ public class connViaBluetooth extends AppCompatActivity {
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if(mBluetoothAdapter == null) {
+        // Get a set of currently paired devices
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+
+        // If there are paired devices, add each one to the ArrayAdapter
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                pairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+        } else {
+            String noDevices = getResources().getText(R.string.none_paired).toString();
+            pairedDevicesArrayAdapter.add(noDevices);
+        }
+
+
+        if (mBluetoothAdapter == null) {
             Toast.makeText(this, "当前设备不支持蓝牙！", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
 
-        if(!mBluetoothAdapter.isEnabled()) {
+        if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(
                     BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -93,11 +149,67 @@ public class connViaBluetooth extends AppCompatActivity {
 
 
     /**
+     * The Handler that gets information back from the BluetoothChatService
+     */
+    @SuppressLint("HandlerLeak")
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Constants.MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case BluetoothChatService.STATE_CONNECTED:
+                            SYSDiaLogUtils.showSuccessDialog(
+                                    connViaBluetooth.this, "连接成功",
+                                    "确认", false);
+
+                            // 延时3秒返回添加设备页面
+                            Timer timer = new Timer();
+                            timer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(connViaBluetooth.this, addDevice.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            },3000);      //8000为毫秒单位
+                            break;
+                        case BluetoothChatService.STATE_CONNECTING:
+                            Toast toast2 = Toast.makeText(
+                                    connViaBluetooth.this,
+                                    "连接中……", Toast.LENGTH_SHORT);
+                            toast2.show();
+                            SYSDiaLogUtils.showProgressDialog(connViaBluetooth.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "正在连接设备...", false, new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    doDiscovery();
+                                }
+                            });
+                    }
+                    break;
+                case Constants.MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
+                    // construct a string from the valid bytes in the buffer
+                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    // 数据格式：yyyy/mm/dd-TYPE-data
+                    String[] healthData = readMessage.split("-");
+
+
+                    Toast toast4 = Toast.makeText(
+                            connViaBluetooth.this,
+                            readMessage, Toast.LENGTH_LONG);
+                    toast4.show();
+
+            }
+        }
+    };
+
+
+    /**
      * Start device discover with the BluetoothAdapter
      */
     private void doDiscovery() {
         // Indicate scanning in the title
-        setProgressBarIndeterminateVisibility(true);
         setTitle("正在搜寻");
         // If we're already discovering, stop it
         if (mBluetoothAdapter.isDiscovering()) {
@@ -111,8 +223,9 @@ public class connViaBluetooth extends AppCompatActivity {
     /**
      * The on-click listener for all devices in the ListViews
      */
-    private AdapterView.OnItemClickListener mDeviceClickListener
+    private final AdapterView.OnItemClickListener mDeviceClickListener
             = new AdapterView.OnItemClickListener() {
+        @SuppressLint("WrongConstant")
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
             // Cancel discovery because it's costly and we're about to connect
             mBluetoothAdapter.cancelDiscovery();
@@ -121,16 +234,16 @@ public class connViaBluetooth extends AppCompatActivity {
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
-            // Create the result Intent and include the MAC address
-            Intent intent = new Intent();
-            intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+            mConnectedDeviceName = info;
 
-            Toast.makeText(connViaBluetooth.this, address, Toast.LENGTH_SHORT).show();
-            // Set result and finish this Activity
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+
+            // 连接设备
+            mChatService.connect(device, true);
+
         }
     };
+
 
     /**
      * The BroadcastReceiver that listens for discovered devices and changes the title when
@@ -151,7 +264,6 @@ public class connViaBluetooth extends AppCompatActivity {
                 }
                 // When discovery is finished, change the Activity title
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                setProgressBarIndeterminateVisibility(false);
                 setTitle("选择需要连接的设备");
                 if (mNewDevicesArrayAdapter.getCount() == 0) {
                     //String noDevices = getResources().getText(R.string.none_found).toString();
@@ -165,12 +277,13 @@ public class connViaBluetooth extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBluetoothAdapter!=null){
+        if (mBluetoothAdapter != null) {
             mBluetoothAdapter.cancelDiscovery();
         }
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(mReceiver);
     }
+
 
     /**
      * 全透状态栏
@@ -205,6 +318,7 @@ public class connViaBluetooth extends AppCompatActivity {
 
     /**
      * 让状态栏字体颜色变深
+     *
      * @param activity
      * @param isLightMode
      */
@@ -220,4 +334,59 @@ public class connViaBluetooth extends AppCompatActivity {
             window.getDecorView().setSystemUiVisibility(option);
         }
     }
+
+
+    /**
+     * 解决：无法发现蓝牙设备的问题
+     * <p>
+     * 对于发现新设备这个功能, 还需另外两个权限(Android M 以上版本需要显式获取授权,附授权代码):
+     */
+    private final int ACCESS_LOCATION = 1;
+
+    @SuppressLint("WrongConstant")
+    private void getPermission() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            int permissionCheck = 0;
+            permissionCheck = this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            permissionCheck += this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                //未获得权限
+                this.requestPermissions( // 请求授权
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION},
+                        ACCESS_LOCATION);// 自定义常量,任意整型
+            }
+        }
+    }
+
+    /**
+     * 请求权限的结果回调。每次调用 requestpermissions（string[]，int）时都会调用此方法。
+     *
+     * @param requestCode  传入的请求代码
+     * @param permissions  传入permissions的要求
+     * @param grantResults 相应权限的授予结果:PERMISSION_GRANTED 或 PERMISSION_DENIED
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case ACCESS_LOCATION:
+                if (hasAllPermissionGranted(grantResults)) {
+                    Log.i(TAG, "onRequestPermissionsResult: 用户允许权限");
+                } else {
+                    Log.i(TAG, "onRequestPermissionsResult: 拒绝搜索设备权限");
+                }
+                break;
+        }
+    }
+
+    private boolean hasAllPermissionGranted(int[] grantResults) {
+        for (int grantResult : grantResults) {
+            if (grantResult == PackageManager.PERMISSION_DENIED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

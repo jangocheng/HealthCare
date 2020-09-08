@@ -11,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import bupt.mxly.healthcare.db.DBAdapter;
 import bupt.mxly.healthcare.db.UserInfo;
 
+import static bupt.mxly.healthcare.ModifyUI.setFitSystemWindow;
+import static bupt.mxly.healthcare.ModifyUI.setStatusBarFullTransparent;
+import static bupt.mxly.healthcare.ModifyUI.setStatusBarLightMode;
+
 public class RegisterActivity extends AppCompatActivity {
     private Button insertbutton;
     private EditText phonetoinsert;
@@ -28,11 +32,19 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+
+        setStatusBarFullTransparent(RegisterActivity.this);
+        setFitSystemWindow(true, RegisterActivity.this);
+        setStatusBarLightMode(this, true);
+
+
         insertbutton = (Button)findViewById(R.id.bt_insert);
         phonetoinsert = (EditText) findViewById(R.id.phonetoinsert);
         pwdtoinsert = (EditText) findViewById(R.id.pwdtoinsert);
         nametoinsert = (EditText) findViewById(R.id.nametoinsert);
         agetoinsert = (EditText) findViewById(R.id.agetoinsert);
+
+
 //        heightroinsert = (EditText) findViewById(R.id.heighttoinsert);
 //        weighttoinsert = (EditText) findViewById(R.id.weighttoinsert);
 //        sextoinsert = (EditText) findViewById(R.id.sextoinsert);

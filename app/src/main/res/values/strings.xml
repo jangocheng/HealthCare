@@ -1,7 +1,12 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">HealthCare</string>
     <string name="title_health">健康数据</string>
     <string name="title_smartdev">智能设备</string>
     <string name="title_contact">紧急联系</string>
     <string name="title_about">我的信息</string>
+
+    <!--  BluetoothChat -->
+
+    <!--  DeviceListActivity -->
+    <string name="none_paired">没有已配对的设备</string>
 </resources>
