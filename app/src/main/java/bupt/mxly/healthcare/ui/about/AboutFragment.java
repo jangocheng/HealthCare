@@ -3,7 +3,6 @@ package bupt.mxly.healthcare.ui.about;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +16,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.card.MaterialCardView;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import bupt.mxly.healthcare.LoginActivity;
-import bupt.mxly.healthcare.MainActivity;
+import com.google.android.material.card.MaterialCardView;
+
 import bupt.mxly.healthcare.R;
 import bupt.mxly.healthcare.RegisterActivity;
 import bupt.mxly.healthcare.db.DBAdapter;
@@ -38,7 +35,7 @@ public class AboutFragment extends Fragment {
     //Button toinformation;
     Button tologin;
     Button toregister;
-    MaterialCardView logout;
+    Button logout;
     LinearLayout inforlayout;
     TextView username;
     TextView showage;
@@ -70,15 +67,37 @@ public class AboutFragment extends Fragment {
         showhistory = (TextView) root.findViewById(R.id.showhisrory);
         showaddress = (TextView) root.findViewById(R.id.showaddress);
         //toinformation=(Button)root.findViewById(R.id.bt_toinformation);
+        toregister = (Button) root.findViewById(R.id.bt_toregister);
+        tologin = (Button) root.findViewById(R.id.bt_tologin);
         logout = (MaterialCardView) root.findViewById(R.id.bt_logout);
+        tologin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                //startActivity(intent);
+                startActivityForResult(intent, 1);
+            }
+        });
+        toregister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                //startActivity(intent);
+                startActivityForResult(intent, 2);
+            }
+        });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 userInfo = new UserInfo();
                 logout.setVisibility(getView().GONE);
+                tologin.setVisibility(getView().VISIBLE);
+                username.setVisibility(getView().GONE);
                 inforlayout.setVisibility(getView().GONE);
+                toregister.setVisibility(getView().VISIBLE);
                 try {
                     savePreferenceFiles("");
                 } catch (IOException e) {
@@ -99,7 +118,9 @@ public class AboutFragment extends Fragment {
         DBAdapter dbAdapter = new DBAdapter();
         if (!userPhone.isEmpty()) {
             username.setVisibility(getView().VISIBLE);
-            username.setText(dbAdapter.queryUserInfo(userPhone).getName());
+            username.setText("欢迎您: " + dbAdapter.queryUserInfo(userPhone).getName());
+            tologin.setVisibility(getView().GONE);
+            toregister.setVisibility(getView().GONE);
             logout.setVisibility(getView().VISIBLE);
             inforlayout.setVisibility(getView().VISIBLE);
             showage.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getAge()));

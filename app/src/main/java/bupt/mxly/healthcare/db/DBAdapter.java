@@ -40,6 +40,9 @@ public class DBAdapter {
                         user.setBlood(rs.getString(8));
                         user.setHistory(rs.getString(9));
                         user.setAddress(rs.getString(10));
+                        user.setGuardian(rs.getString(11));
+                        user.setSipid(rs.getString(12));
+                        user.setIp(rs.getString(13));
                         i++;
                     }
                     st.close();
@@ -87,7 +90,7 @@ public class DBAdapter {
                 Connection conn = null;
                 int u = 0;
                 conn =(Connection) DBOpenHelper.getConn();
-                String sql = "insert into userInfo (phone,pwd,name,age,height,weight,sex,blood,history,address) values(?,?,?,?,?,?,?,?,?,?)";
+                String sql = "insert into userInfo (phone,pwd,name,age,height,weight,sex,blood,history,address,guardian,ip) values(?,?,?,?,?,?,?,?,?,?,?,?)";
                 PreparedStatement pst;
                 try {
                     pst = (PreparedStatement) conn.prepareStatement(sql);
@@ -102,7 +105,9 @@ public class DBAdapter {
                     pst.setString(8,info.getBlood());
                     pst.setString(9,info.getHistory());
                     pst.setString(10,info.getAddress());
-
+                    pst.setString(11,info.getGuardian());
+                    pst.setString(12,info.getSipid());
+                    pst.setString(12,info.getIp());
                     u = pst.executeUpdate();
                     pst.close();
                     conn.close();
@@ -121,10 +126,11 @@ public class DBAdapter {
                 Connection conn = null;
                 int u = 0;
                 conn =(Connection) DBOpenHelper.getConn();
-                String sql = "update userInfo set pwd=?,name=?,age=?,height=?,weight=?,sex=?,blood=?,history=?,address=? where phone=?";
+                String sql = "update userInfo set pwd=?,name=?,age=?,height=?,weight=?,sex=?,blood=?,history=?,address=?,guardian=?,ip=? where phone=?";
                 PreparedStatement pst;
                 try {
                     pst = (PreparedStatement) conn.prepareStatement(sql);
+                    
                     pst.setString(1,info.getPwd());
                     pst.setString(2,info.getName());
                     pst.setInt(3,info.getAge());
@@ -134,7 +140,36 @@ public class DBAdapter {
                     pst.setString(7,info.getBlood());
                     pst.setString(8,info.getHistory());
                     pst.setString(9,info.getAddress());
-                    pst.setString(10,info.getPhone());
+                    pst.setString(10,info.getGuardian());
+                    pst.setString(11,info.getIp());
+                    pst.setString(12,info.getPhone());
+                    u = pst.executeUpdate();
+                    pst.close();
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        sqlthread.start();
+    }//更新用户信息
+
+    public void updateuserip(final UserInfo info){
+        final Thread sqlthread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = null;
+                int u = 0;
+                conn =(Connection) DBOpenHelper.getConn();
+                String sql = "update userInfo set ip=? where phone=?";
+                PreparedStatement pst;
+                try {
+                    pst = (PreparedStatement) conn.prepareStatement(sql);
+
+
+                    pst.setString(1,info.getIp());
+                    pst.setString(2,info.getPhone());
+
                     u = pst.executeUpdate();
                     pst.close();
                     conn.close();

@@ -1,7 +1,6 @@
 package bupt.mxly.healthcare.db;
 
-import java.util.Date;
-
+import java.util.Date;;
 public class DataInfo {
     private String userId;
     private Date collectTime;

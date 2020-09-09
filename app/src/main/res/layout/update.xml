@@ -66,6 +66,12 @@
             android:layout_height="50dp"
             android:hint="请输入地址"
             />
+        <EditText
+            android:id="@+id/guardiantoinsert"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="请输入监护人电话"
+            />
     <Button
         android:id="@+id/bt_insert"
         android:layout_width="match_parent"

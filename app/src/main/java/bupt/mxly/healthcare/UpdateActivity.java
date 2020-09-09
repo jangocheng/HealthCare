@@ -1,15 +1,9 @@
 package bupt.mxly.healthcare;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,6 +30,7 @@ public class UpdateActivity extends AppCompatActivity {
     private EditText bloodtoinsert;
     private EditText historytoinsert;
     private EditText addresstoinsert;
+    private EditText guardiantoinsert;
     String phone;
 
     @Override
@@ -54,6 +49,7 @@ public class UpdateActivity extends AppCompatActivity {
         bloodtoinsert = (EditText) findViewById(R.id.bloodtoinsert);
         historytoinsert = (EditText) findViewById(R.id.historytoinsert);
         addresstoinsert = (EditText) findViewById(R.id.addresstoinsert);
+        guardiantoinsert = (EditText) findViewById(R.id.guardiantoinsert);
 
         setStatusBarFullTransparent(UpdateActivity.this);
         setFitSystemWindow(true, UpdateActivity.this);

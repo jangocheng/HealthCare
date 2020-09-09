@@ -13,6 +13,35 @@ public class UserInfo implements Serializable {
     private String history;
     private String address;
 
+    public String getSipid() {
+        return sipid;
+    }
+
+    public void setSipid(String sipid) {
+        this.sipid = sipid;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    private String sipid;
+    private String ip;
+
+    public String getGuardian() {
+        return guardian;
+    }
+
+    public void setGuardian(String guardian) {
+        this.guardian = guardian;
+    }
+
+    private String guardian;
+
     public String getPhone() {
         return phone;
     }

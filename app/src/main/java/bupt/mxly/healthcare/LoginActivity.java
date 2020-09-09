@@ -1,17 +1,10 @@
 package bupt.mxly.healthcare;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,10 +20,7 @@ import java.io.IOException;
 import bupt.mxly.healthcare.db.DBAdapter;
 import bupt.mxly.healthcare.db.UserInfo;
 
-import static bupt.mxly.healthcare.ModifyUI.setFitSystemWindow;
 import static bupt.mxly.healthcare.ModifyUI.setStatusBar;
-import static bupt.mxly.healthcare.ModifyUI.setStatusBarFullTransparent;
-import static bupt.mxly.healthcare.ModifyUI.setStatusBarLightMode;
 
 public class LoginActivity extends AppCompatActivity {
     TextInputEditText phone_login;
@@ -98,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 UserInfo userinf = db.queryUserInfo(phone_login.getText().toString());
                 String correctpwd = rc4.crypt(userinf.getPwd());
+//                String correctpwd = userinf.getPwd();
                 String pwd = pwd_login.getText().toString();
                 if (correctpwd.equals(pwd)) {
 //                    login_result.setText("登录成功");

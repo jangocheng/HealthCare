@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -75,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
 //                info.setHistory(historytoinsert.getText().toString());
 //                info.setAddress(addresstoinsert.getText().toString());
                 db.insertUserInfo(info);
+                System.out.println("111111111111111111");
 
                 Intent intent=new Intent(RegisterActivity.this, MainActivity.class);
                 intent.putExtra("userinfo",info);
