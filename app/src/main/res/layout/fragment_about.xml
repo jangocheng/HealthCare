@@ -5,316 +5,387 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.about.AboutFragment">
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title_about"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="25dp"
-            android:textSize="40sp"
-            android:textColor="#000000" />
-
-        <Button
-            android:id="@+id/bt_tologin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="登录"
-            />
-        <Button
-            android:id="@+id/bt_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="退出登录"
-            />
-        <Button
-            android:id="@+id/bt_toregister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="注册"
-            />
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="12dp"
-            android:textSize="40sp"
-            android:textColor="#000000" />
         <LinearLayout
-            android:id="@+id/infolayout"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-<!--            <Button-->
-<!--                android:id="@+id/bt_toinformation"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="查看个人信息"-->
-<!--                />-->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="3dp"
-                android:paddingHorizontal="30dp"
-                android:text="年龄"
-                android:textColor="@color/colorTextSelected"
-                android:textSize="20sp" />
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginVertical="5dp"
-                android:layout_marginHorizontal="30dp"
-                android:background="@color/colorWhite"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-
-                    <TextView
-                        android:id="@+id/showage"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingVertical="3dp"
-                        android:paddingHorizontal="30dp"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="3dp"
-                android:paddingHorizontal="30dp"
-                android:text="身高"
-                android:textColor="@color/colorTextSelected"
-                android:textSize="20sp" />
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginVertical="5dp"
-                android:layout_marginHorizontal="30dp"
-                android:background="@color/colorWhite"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/title_about"
+                android:textColor="#000000"
+                android:textSize="40sp" />
 
-                <LinearLayout
+            <LinearLayout
+                android:id="@+id/infolayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="3dp"
+                    android:text="姓名"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/username"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            android:gravity="center"
+                            android:paddingVertical="3dp"
+                            android:textColor="@color/colorButtom"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="3dp"
+                    android:layout_marginTop="10dp"
+                    android:text="年龄"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/showage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            android:gravity="center"
+                            android:paddingVertical="3dp"
+                            android:textColor="@color/colorButtom"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="3dp"
+                    android:layout_marginTop="10dp"
+                    android:text="身高"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/showheight"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            android:paddingVertical="3dp"
+                            android:gravity="center"
+                            android:textColor="@color/colorButtom"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="3dp"
+                    android:text="体重"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/showweight"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            android:paddingVertical="3dp"
+                            android:gravity="center"
+                            android:textColor="@color/colorButtom"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="3dp"
+                    android:layout_marginTop="10dp"
+                    android:text="性别"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/showsex"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            android:paddingVertical="3dp"
+                            android:gravity="center"
+                            android:textColor="@color/colorButtom"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="3dp"
+                    android:layout_marginTop="10dp"
+                    android:text="血型"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/showblood"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            android:paddingVertical="3dp"
+                            android:gravity="center"
+                            android:textColor="@color/colorButtom"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="3dp"
+                    android:text="病史"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/showhisrory"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            android:paddingVertical="3dp"
+                            android:textColor="@color/colorButtom"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="3dp"
+                    android:text="地址"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/showaddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            android:paddingVertical="3dp"
+                            android:textColor="@color/colorButtom"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/bt_logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="90dp"
+                    android:background="@color/colorWhite"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp">
 
-
-
-                    <TextView
-                        android:id="@+id/showheight"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingVertical="3dp"
-                        android:paddingHorizontal="30dp"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:scaleType="center"
+                            android:src="@drawable/ic_baseline_exit_to_app_24" />
 
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="3dp"
-                android:paddingHorizontal="30dp"
-                android:text="体重"
-                android:textColor="@color/colorTextSelected"
-                android:textSize="20sp" />
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginVertical="5dp"
-                android:layout_marginHorizontal="30dp"
-                android:background="@color/colorWhite"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:padding="16dp"
+                            android:text="退出登录"
+                            android:textColor="@color/colorTextSelected"
+                            android:textSize="20sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
 
-
-                    <TextView
-                        android:id="@+id/showweight"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingVertical="3dp"
-                        android:paddingHorizontal="30dp"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="3dp"
-                android:paddingHorizontal="30dp"
-                android:text="性别"
-                android:textColor="@color/colorTextSelected"
-                android:textSize="20sp" />
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginVertical="5dp"
-                android:layout_marginHorizontal="30dp"
-                android:background="@color/colorWhite"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-
-                    <TextView
-                        android:id="@+id/showsex"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingVertical="3dp"
-                        android:paddingHorizontal="30dp"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="3dp"
-                android:paddingHorizontal="30dp"
-                android:text="血型"
-                android:textColor="@color/colorTextSelected"
-                android:textSize="20sp" />
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginVertical="5dp"
-                android:layout_marginHorizontal="30dp"
-                android:background="@color/colorWhite"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-
-                    <TextView
-                        android:id="@+id/showblood"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingVertical="3dp"
-                        android:paddingHorizontal="30dp"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="3dp"
-                android:paddingHorizontal="30dp"
-                android:text="病史"
-                android:textColor="@color/colorTextSelected"
-                android:textSize="20sp" />
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginVertical="5dp"
-                android:layout_marginHorizontal="30dp"
-                android:background="@color/colorWhite"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-
-                    <TextView
-                        android:id="@+id/showhisrory"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingVertical="3dp"
-                        android:paddingHorizontal="30dp"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="3dp"
-                android:paddingHorizontal="30dp"
-                android:text="地址"
-                android:textColor="@color/colorTextSelected"
-                android:textSize="20sp" />
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginVertical="5dp"
-                android:layout_marginHorizontal="30dp"
-                android:background="@color/colorWhite"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/showaddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingVertical="3dp"
-                        android:paddingHorizontal="30dp"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-
-
-    </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

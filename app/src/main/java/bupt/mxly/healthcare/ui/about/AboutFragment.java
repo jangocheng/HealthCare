@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.card.MaterialCardView;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,7 +38,7 @@ public class AboutFragment extends Fragment {
     //Button toinformation;
     Button tologin;
     Button toregister;
-    Button logout;
+    MaterialCardView logout;
     LinearLayout inforlayout;
     TextView username;
     TextView showage;
@@ -68,37 +70,15 @@ public class AboutFragment extends Fragment {
         showhistory = (TextView) root.findViewById(R.id.showhisrory);
         showaddress = (TextView) root.findViewById(R.id.showaddress);
         //toinformation=(Button)root.findViewById(R.id.bt_toinformation);
-        toregister = (Button) root.findViewById(R.id.bt_toregister);
-        tologin = (Button) root.findViewById(R.id.bt_tologin);
-        logout = (Button) root.findViewById(R.id.bt_logout);
-        tologin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        logout = (MaterialCardView) root.findViewById(R.id.bt_logout);
 
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                //startActivity(intent);
-                startActivityForResult(intent, 1);
-            }
-        });
-        toregister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getActivity(), RegisterActivity.class);
-                //startActivity(intent);
-                startActivityForResult(intent, 2);
-            }
-        });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 userInfo = new UserInfo();
                 logout.setVisibility(getView().GONE);
-                tologin.setVisibility(getView().VISIBLE);
-                username.setVisibility(getView().GONE);
                 inforlayout.setVisibility(getView().GONE);
-                toregister.setVisibility(getView().VISIBLE);
                 try {
                     savePreferenceFiles("");
                 } catch (IOException e) {
@@ -119,9 +99,7 @@ public class AboutFragment extends Fragment {
         DBAdapter dbAdapter = new DBAdapter();
         if (!userPhone.isEmpty()) {
             username.setVisibility(getView().VISIBLE);
-            username.setText("欢迎您: " + dbAdapter.queryUserInfo(userPhone).getName());
-            tologin.setVisibility(getView().GONE);
-            toregister.setVisibility(getView().GONE);
+            username.setText(dbAdapter.queryUserInfo(userPhone).getName());
             logout.setVisibility(getView().VISIBLE);
             inforlayout.setVisibility(getView().VISIBLE);
             showage.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getAge()));

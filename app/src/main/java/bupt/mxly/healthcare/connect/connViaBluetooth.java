@@ -88,11 +88,7 @@ public class connViaBluetooth extends AppCompatActivity {
 
         getPermission();
 
-        mSpf = getSharedPreferences("userinfo", Context.MODE_ENABLE_WRITE_AHEAD_LOGGING);
-
         sql_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        userPhone = mSpf.getString("phone","");
 
         btn_back = findViewById(R.id.btn_back2addDev);
         btn_back.setOnClickListener(new View.OnClickListener() {

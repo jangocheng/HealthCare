@@ -46,29 +46,30 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="16dp"
-                            android:text="血压"
+                            android:text="血压 (mmHg)"
                             android:textColor="@color/colorTextSelected"
                             android:textSize="20sp" />
                     </LinearLayout>
 
-                    <tech.linjiang.suitlines.SuitLines
-                        xmlns:line="http://schemas.android.com/apk/res-auto"
+                    <tech.linjiang.suitlines.SuitLines xmlns:line="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/suitlines"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        line:xySize="8"
-                        line:xyColor="@color/colorAccent"
-                        line:lineType="curve"
-                        line:needEdgeEffect="true"
-                        line:colorEdgeEffect="@color/colorPrimaryDark"
-                        line:needClickHint="true"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        line:colorEdgeEffect="@color/colorPrimary"
                         line:colorHint="@color/colorPrimary"
+                        line:countOfY="6"
+                        line:lineType="curve"
                         line:maxOfVisible="7"
-                        line:countOfY="6"/>
+                        line:needClickHint="true"
+                        line:needEdgeEffect="true"
+                        line:xyColor="#000000"
+                        line:xySize="8" />
 
                 </LinearLayout>
 
@@ -97,21 +98,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="16dp"
-                            android:text="心率"
+                            android:text="心率 (次/分)"
                             android:textColor="@color/colorTextSelected"
                             android:textSize="20sp" />
 
                     </LinearLayout>
 
-                    <TextView
+                    <tech.linjiang.suitlines.SuitLines xmlns:line="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/suitlines_3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="20dp"
-                        android:text="62次/分"
-                        android:textColor="#000000"
-                        android:textSize="40dp"
-                        android:typeface="monospace" />
+                        android:padding="10dp"
+                        line:colorEdgeEffect="@color/colorPrimaryDark"
+                        line:colorHint="@color/colorPrimary"
+                        line:countOfY="6"
+                        line:lineType="curve"
+                        line:maxOfVisible="7"
+                        line:needClickHint="true"
+                        line:needEdgeEffect="true"
+                        line:xyColor="#000000"
+                        line:xySize="8" />
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -125,19 +132,39 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="16dp"
+                            android:text="睡眠时间 (小时)"
+                            android:textColor="@color/colorTextSelected"
+                            android:textSize="20dp" />
+
+                    </LinearLayout>
+
+                    <tech.linjiang.suitlines.SuitLines xmlns:line="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/suitlines_4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="16dp"
-                        android:text="睡眠"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20dp" />
-
+                        android:padding="10dp"
+                        line:colorEdgeEffect="@color/colorPrimary"
+                        line:colorHint="@color/colorPrimary"
+                        line:countOfY="6"
+                        line:lineType="curve"
+                        line:maxOfVisible="7"
+                        line:needClickHint="true"
+                        line:needEdgeEffect="true"
+                        line:xyColor="#000000"
+                        line:xySize="8" />
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -153,19 +180,39 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="16dp"
+                            android:text="血糖 (mmol/L)"
+                            android:textColor="@color/colorTextSelected"
+                            android:textSize="20dp" />
+
+                    </LinearLayout>
+
+                    <tech.linjiang.suitlines.SuitLines xmlns:line="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/suitlines_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="16dp"
-                        android:text="血糖"
-                        android:textColor="@color/colorTextSelected"
-                        android:textSize="20dp" />
-
+                        android:padding="10dp"
+                        app:colorEdgeEffect="@color/colorPrimaryDark"
+                        app:colorHint="@color/colorPrimary"
+                        app:countOfY="6"
+                        app:lineType="curve"
+                        app:maxOfVisible="7"
+                        app:needClickHint="true"
+                        app:needEdgeEffect="true"
+                        app:xySize="8"
+                        line:xyColor="#000000" />
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
 
