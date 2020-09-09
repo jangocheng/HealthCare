@@ -24,6 +24,7 @@ import com.google.android.material.card.MaterialCardView;
 import bupt.mxly.healthcare.connect.connViaBluetooth;
 
 import static bupt.mxly.healthcare.ModifyUI.setFitSystemWindow;
+import static bupt.mxly.healthcare.ModifyUI.setStatusBar;
 import static bupt.mxly.healthcare.ModifyUI.setStatusBarFullTransparent;
 import static bupt.mxly.healthcare.ModifyUI.setStatusBarLightMode;
 
@@ -75,11 +76,7 @@ public class addDevice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
 
-        /* 设置透明状态栏 */
-        setStatusBarFullTransparent(addDevice.this);
-        setFitSystemWindow(true, addDevice.this);
-        setStatusBarLightMode(this, true);
-        /* *********** */
+        setStatusBar(addDevice.this, true, true);
 
         btn_back = findViewById(R.id.btn_back);
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -91,12 +88,12 @@ public class addDevice extends AppCompatActivity {
 
 
         btn_blt = findViewById(R.id.bluetooth);
-        btn_blt.setOnClickListener(new View.OnClickListener(){
+        btn_blt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
+                try {
                     Intent intent = new Intent(addDevice.this, connViaBluetooth.class);
-                    startActivityForResult(intent,REQUEST_CONNECT_DEVICE_SECURE);
+                    startActivityForResult(intent, REQUEST_CONNECT_DEVICE_SECURE);
                 } catch (Exception ex) {
                     // 显示异常
                     Toast.makeText(addDevice.this, ex.getMessage(), Toast.LENGTH_SHORT).show();

@@ -1,49 +1,39 @@
 package bupt.mxly.healthcare.connect;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Messenger;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.fingerth.supdialogutils.SYSDiaLogUtils;
 
-import java.lang.reflect.Method;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,16 +41,25 @@ import java.util.TimerTask;
 import bupt.mxly.healthcare.MainActivity;
 import bupt.mxly.healthcare.R;
 import bupt.mxly.healthcare.addDevice;
+import bupt.mxly.healthcare.db.DBAdapter;
+import bupt.mxly.healthcare.db.DataInfo;
+
+import static bupt.mxly.healthcare.ModifyUI.setStatusBar;
 
 public class connViaBluetooth extends AppCompatActivity {
 
     private static final String TAG = "error";
+
     Button btn_back;
+
     private final static int REQUEST_ENABLE_BT = 1; //用于打开手机蓝牙
+
     private final static int HEALTH_PROFILE_SOURCE_DATA_TYPE = 0x1007; //IEEE血压数据类型
+
     private BluetoothAdapter mBluetoothAdapter;
     // 新发现设备列表
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
+
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
     private BluetoothSocket mBluetoothSocket;
@@ -69,16 +68,31 @@ public class connViaBluetooth extends AppCompatActivity {
 
     private BluetoothChatService mChatService = null;
 
+    private SimpleDateFormat sql_time;
+
+    private SharedPreferences mSpf;
+
+    private String userPhone = null;
+
+    private DBAdapter dbAdapter;
+
+    private final String FILE_NAME = "config.ini";
+
+    @SuppressLint({"SimpleDateFormat", "WrongConstant"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conn_via_bluetooth);
 
-        setStatusBarFullTransparent();
-        setFitSystemWindow(true);
-        setStatusBarLightMode(this, true);
+        setStatusBar(connViaBluetooth.this, true, true);
 
         getPermission();
+
+        mSpf = getSharedPreferences("userinfo", Context.MODE_ENABLE_WRITE_AHEAD_LOGGING);
+
+        sql_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        userPhone = mSpf.getString("phone","");
 
         btn_back = findViewById(R.id.btn_back2addDev);
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -191,10 +205,22 @@ public class connViaBluetooth extends AppCompatActivity {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    // 数据格式：yyyy/mm/dd-TYPE-data
-                    String[] healthData = readMessage.split("-");
+                    // 数据格式：yyyy-mm-dd HH:MM:SS*TYPE*data
+                    String[] healthData = readMessage.split("@");
 
-
+                    try {
+                        dbAdapter = new DBAdapter();
+                        DataInfo dataInfo = new DataInfo();
+                        dataInfo.setCollectTime(strToDate(healthData[0]));
+                        dataInfo.setDataType(healthData[1]);
+                        dataInfo.setHealthData(healthData[2]);
+                        loadPreferencesFile();
+                        dataInfo.setUserId(userPhone);
+                        System.out.println(userPhone);
+                        dbAdapter.insertDataInfo(dataInfo);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     Toast toast4 = Toast.makeText(
                             connViaBluetooth.this,
                             readMessage, Toast.LENGTH_LONG);
@@ -286,57 +312,6 @@ public class connViaBluetooth extends AppCompatActivity {
 
 
     /**
-     * 全透状态栏
-     */
-    protected void setStatusBarFullTransparent() {
-        if (Build.VERSION.SDK_INT >= 21) {//21表示5.0
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= 19) {//19表示4.4
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //虚拟键盘也透明
-            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
-    }
-
-    /**
-     * 如果需要内容紧贴着StatusBar
-     * 应该在对应的xml布局文件中，设置根布局fitsSystemWindows=true。
-     */
-    private View contentViewGroup;
-
-    protected void setFitSystemWindow(boolean fitSystemWindow) {
-        if (contentViewGroup == null) {
-            contentViewGroup = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-        }
-        contentViewGroup.setFitsSystemWindows(fitSystemWindow);
-    }
-
-    /**
-     * 让状态栏字体颜色变深
-     *
-     * @param activity
-     * @param isLightMode
-     */
-    public static void setStatusBarLightMode(Activity activity, boolean isLightMode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Window window = activity.getWindow();
-            int option = window.getDecorView().getSystemUiVisibility();
-            if (isLightMode) {
-                option |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            } else {
-                option &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            }
-            window.getDecorView().setSystemUiVisibility(option);
-        }
-    }
-
-
-    /**
      * 解决：无法发现蓝牙设备的问题
      * <p>
      * 对于发现新设备这个功能, 还需另外两个权限(Android M 以上版本需要显式获取授权,附授权代码):
@@ -387,6 +362,34 @@ public class connViaBluetooth extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    private void loadPreferencesFile() throws IOException {
+        try {
+            FileInputStream fis = openFileInput(FILE_NAME);
+            if (fis.available() == 0) {
+                return;
+            }
+            byte[] readBytes = new byte[fis.available()];
+            while (fis.read(readBytes) != -1) {
+            }
+            userPhone = new String(readBytes);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static java.sql.Date strToDate(String strDate) {
+        String str = strDate;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date d = null;
+        try {
+            d = format.parse(str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        java.sql.Date date = new java.sql.Date(d.getTime());
+        return date;
     }
 
 }

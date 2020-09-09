@@ -9,6 +9,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class ModifyUI {
+    public static void setStatusBar(Activity activity, boolean fitSystemWindow, boolean isLightMode) {
+        setStatusBarFullTransparent(activity);
+        setFitSystemWindow(fitSystemWindow, activity);
+        setStatusBarLightMode(activity, isLightMode);
+    }
+
     /**
      * 全透状态栏
      */

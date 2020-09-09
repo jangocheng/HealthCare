@@ -8,6 +8,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import bupt.mxly.healthcare.db.DBAdapter;
 import bupt.mxly.healthcare.db.UserInfo;
 
@@ -17,16 +19,11 @@ import static bupt.mxly.healthcare.ModifyUI.setStatusBarLightMode;
 
 public class RegisterActivity extends AppCompatActivity {
     private Button insertbutton;
-    private EditText phonetoinsert;
-    private EditText pwdtoinsert;
-    private EditText nametoinsert;
-    private EditText agetoinsert;
-    private EditText heightroinsert;
-    private EditText weighttoinsert;
-    private EditText sextoinsert;
-    private EditText bloodtoinsert;
-    private EditText historytoinsert;
-    private EditText addresstoinsert;
+    private Button back;
+    private TextInputEditText phonetoinsert;
+    private TextInputEditText pwdtoinsert;
+    private TextInputEditText nametoinsert;
+    private TextInputEditText agetoinsert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +34,20 @@ public class RegisterActivity extends AppCompatActivity {
         setFitSystemWindow(true, RegisterActivity.this);
         setStatusBarLightMode(this, true);
 
+        back = findViewById(R.id.btn_back);
+        insertbutton = findViewById(R.id.bt_insert);
+        phonetoinsert = findViewById(R.id.phonetoinsert);
+        pwdtoinsert = findViewById(R.id.pwdtoinsert);
+        nametoinsert = findViewById(R.id.nametoinsert);
+        agetoinsert = findViewById(R.id.agetoinsert);
 
-        insertbutton = (Button)findViewById(R.id.bt_insert);
-        phonetoinsert = (EditText) findViewById(R.id.phonetoinsert);
-        pwdtoinsert = (EditText) findViewById(R.id.pwdtoinsert);
-        nametoinsert = (EditText) findViewById(R.id.nametoinsert);
-        agetoinsert = (EditText) findViewById(R.id.agetoinsert);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-
-//        heightroinsert = (EditText) findViewById(R.id.heighttoinsert);
-//        weighttoinsert = (EditText) findViewById(R.id.weighttoinsert);
-//        sextoinsert = (EditText) findViewById(R.id.sextoinsert);
-//        bloodtoinsert = (EditText) findViewById(R.id.bloodtoinsert);
-//        historytoinsert = (EditText) findViewById(R.id.historytoinsert);
-//        addresstoinsert = (EditText) findViewById(R.id.addresstoinsert);
     }
 
     @Override

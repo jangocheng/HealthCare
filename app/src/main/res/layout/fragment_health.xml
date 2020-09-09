@@ -55,16 +55,20 @@
                             android:textSize="20sp" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/testData"
+                    <tech.linjiang.suitlines.SuitLines
+                        xmlns:line="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/suitlines"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="20dp"
-                        android:text="116/83mmHg"
-                        android:textColor="#000000"
-                        android:textSize="40dp"
-                        android:typeface="monospace" />
+                        android:layout_height="200dp"
+                        line:xySize="8"
+                        line:xyColor="@color/colorAccent"
+                        line:lineType="curve"
+                        line:needEdgeEffect="true"
+                        line:colorEdgeEffect="@color/colorPrimaryDark"
+                        line:needClickHint="true"
+                        line:colorHint="@color/colorPrimary"
+                        line:maxOfVisible="7"
+                        line:countOfY="6"/>
 
                 </LinearLayout>
 

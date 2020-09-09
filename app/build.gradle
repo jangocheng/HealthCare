@@ -35,6 +35,7 @@ dependencies {
     implementation 'cn.wolfspider:autowraplinelayout:1.0.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation files('libs/mysql-connector-java-5.1.47.jar')
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     implementation 'com.github.fingerth:FingerthAndroidUtils:1.0.3'
+    implementation 'tech.linjiang:suitlines:1.1.0'
 }
