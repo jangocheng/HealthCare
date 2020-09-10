@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
-import bupt.mxly.healthcare.MainActivity;
 import bupt.mxly.healthcare.R;
 import bupt.mxly.healthcare.db.DBAdapter;
 import bupt.mxly.healthcare.db.UserInfo;

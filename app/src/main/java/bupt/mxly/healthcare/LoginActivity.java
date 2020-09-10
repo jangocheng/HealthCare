@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import bupt.mxly.healthcare.db.DBAdapter;
+import bupt.mxly.healthcare.db.Sipserver;
 import bupt.mxly.healthcare.db.UserInfo;
 
 import static bupt.mxly.healthcare.ModifyUI.setStatusBar;
@@ -97,10 +98,19 @@ public class LoginActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    //自动分配sipid,检索数据库中空闲的sipid,自动分配最后一条给user
+                    Sipserver sip;
+                    DBAdapter sipdb = new DBAdapter();
+                    sip=sipdb.querySipserver();//检索空闲sipid
+                    userinf.setSipid(sip.getSipid());//为user分配sipid
+                    sipdb.updateusersip(userinf);//更新用户信息，将其sipid保存到数据库
+                    sip.setOccupied(1);//更改sipid的状态为占用
+                    sipdb.updatesip(sip);//保存sipid的状态到数据库
+
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("userinfo", userinf);
-                    //startActivity(intent);
-                    setResult(1, intent);
+                    startActivity(intent);
+//                    setResult(1, intent);
                     finish();
                 } else {
                     login_result.setText("登录失败");

@@ -26,6 +26,7 @@ import java.io.IOException;
 import bupt.mxly.healthcare.LoginActivity;
 import bupt.mxly.healthcare.R;
 import bupt.mxly.healthcare.db.DBAdapter;
+import bupt.mxly.healthcare.db.Sipserver;
 import bupt.mxly.healthcare.db.UserInfo;
 
 public class AboutFragment extends Fragment {
@@ -90,13 +91,21 @@ public class AboutFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DBAdapter db = new DBAdapter();
+                UserInfo user= new UserInfo();
+                user = db.queryUserInfo(userPhone);//根据从sharepreference得到的userphone检索user信息
+                String sipid = user.getSipid();//获取用户占用的sipid
+                //解除sipid的占用状态
+                Sipserver sip = db.querySipserver(sipid);
+                sip.setOccupied(0);
+                db.updatesip(sip);
+                //重置用户的sipid
+                user.setSipid(" ");
+                db.updateusersip(user);
 
-                userInfo = new UserInfo();
                 logout.setVisibility(getView().GONE);
-                tologin.setVisibility(getView().VISIBLE);
                 username.setVisibility(getView().GONE);
                 inforlayout.setVisibility(getView().GONE);
-                toregister.setVisibility(getView().VISIBLE);
                 try {
                     savePreferenceFiles("");
                 } catch (IOException e) {
