@@ -126,7 +126,7 @@ public class DBAdapter {
                 Connection conn = null;
                 int u = 0;
                 conn =(Connection) DBOpenHelper.getConn();
-                String sql = "update userInfo set pwd=?,name=?,age=?,height=?,weight=?,sex=?,blood=?,history=?,address=?,guardian=?,ip=? where phone=?";
+                String sql = "update userInfo set pwd=?,name=?,age=?,height=?,weight=?,sex=?,blood=?,history=?,address=? where phone=?";
                 PreparedStatement pst;
                 try {
                     pst = (PreparedStatement) conn.prepareStatement(sql);
@@ -140,9 +140,7 @@ public class DBAdapter {
                     pst.setString(7,info.getBlood());
                     pst.setString(8,info.getHistory());
                     pst.setString(9,info.getAddress());
-                    pst.setString(10,info.getGuardian());
-                    pst.setString(11,info.getIp());
-                    pst.setString(12,info.getPhone());
+                    pst.setString(10,info.getPhone());
                     u = pst.executeUpdate();
                     pst.close();
                     conn.close();

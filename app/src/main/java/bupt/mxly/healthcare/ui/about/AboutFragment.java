@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import bupt.mxly.healthcare.LoginActivity;
 import bupt.mxly.healthcare.R;
+import bupt.mxly.healthcare.UpdateActivity;
 import bupt.mxly.healthcare.db.DBAdapter;
 import bupt.mxly.healthcare.db.Sipserver;
 import bupt.mxly.healthcare.db.UserInfo;
@@ -45,6 +46,7 @@ public class AboutFragment extends Fragment {
     TextView showblood;
     TextView showhistory;
     TextView showaddress;
+    MaterialCardView toupdate;
     UserInfo userInfo;
 
     String userPhone = "";
@@ -66,6 +68,7 @@ public class AboutFragment extends Fragment {
         showblood = (TextView) root.findViewById(R.id.showblood);
         showhistory = (TextView) root.findViewById(R.id.showhisrory);
         showaddress = (TextView) root.findViewById(R.id.showaddress);
+         toupdate=(MaterialCardView)root.findViewById(R.id.bt_update);
         //toinformation=(Button)root.findViewById(R.id.bt_toinformation);
 //        toregister = (Button) root.findViewById(R.id.bt_toregister);
 //        tologin = (Button) root.findViewById(R.id.bt_tologin);
@@ -88,6 +91,14 @@ public class AboutFragment extends Fragment {
 //                startActivityForResult(intent, 2);
 //            }
 //        });
+        toupdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), UpdateActivity.class);
+                startActivity(intent);
+            }
+        });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

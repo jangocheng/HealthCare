@@ -10,6 +10,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import bupt.mxly.healthcare.db.DBAdapter;
 import bupt.mxly.healthcare.db.UserInfo;
 
@@ -33,6 +37,8 @@ public class UpdateActivity extends AppCompatActivity {
     private EditText guardiantoinsert;
     String phone;
 
+    String userPhone = "";
+    private final String FILE_NAME = "config.ini";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +72,11 @@ public class UpdateActivity extends AppCompatActivity {
         //rc4算法初始化
         rc4.key = "WhQpVccuUyCblNuSmk6NXE3INAICmKdJpTFQUd5jYUSTg0thV58Kqrjk1KaLq0xZbJqAjhmr5lFzgCrbh4U6j2p5NarTW02YDv4QxkqhjbbH5SdzXuNt5xU4pEYHnM9Wkg34Sa1OU9zCNZk1tefeDrfBNR6419n3QdBPcESkJcXcsUzHws0gHDpHRzqPI0KRJd5s58Zc8vgQYFuT6GpWLbdrgOoV74Yj5mroMyGFW6DhMT8anvWRZLiFtWrbfR8d".toCharArray();
         rc4.initSbox();
+        try {
+            loadPreferencesFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         insertbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,23 +84,23 @@ public class UpdateActivity extends AppCompatActivity {
                 if(pwdtoinsert.getText().toString().equals(pwdtoverify.getText().toString())){
                     DBAdapter db = new DBAdapter();
                     UserInfo info = new UserInfo();
-                    info.setPhone(phone);
-                    System.out.println(phone);
+                    info.setPhone(userPhone);
+//                    System.out.println(phone);
                     info.setName(nametoinsert.getText().toString());
                     info.setPwd(rc4.crypt(pwdtoinsert.getText().toString()));
                     info.setAge(Integer.parseInt(agetoinsert.getText().toString()));
-                info.setHeight(Double.parseDouble(heightroinsert.getText().toString()));
-                info.setWeight(Double.parseDouble(weighttoinsert.getText().toString()));
-                info.setSex(sextoinsert.getText().toString());
-                info.setBlood(bloodtoinsert.getText().toString());
-                info.setHistory(historytoinsert.getText().toString());
-                info.setAddress(addresstoinsert.getText().toString());
+                    info.setHeight(Double.parseDouble(heightroinsert.getText().toString()));
+                    info.setWeight(Double.parseDouble(weighttoinsert.getText().toString()));
+                    info.setSex(sextoinsert.getText().toString());
+                    info.setBlood(bloodtoinsert.getText().toString());
+                    info.setHistory(historytoinsert.getText().toString());
+                    info.setAddress(addresstoinsert.getText().toString());
 
                     db.updateUserInfo(info);
 
                     Intent intent=new Intent(UpdateActivity.this, MainActivity.class);
                     intent.putExtra("userinfo",info);
-                    setResult(1,intent);
+//                    setResult(1,intent);
                     finish();
                 }
                 else{
@@ -103,6 +114,21 @@ public class UpdateActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void loadPreferencesFile() throws IOException {
+        try {
+            FileInputStream fis = UpdateActivity.this.openFileInput(FILE_NAME);
+            if (fis.available() == 0) {
+                return;
+            }
+            byte[] readBytes = new byte[fis.available()];
+            while (fis.read(readBytes) != -1) {
+            }
+            userPhone = new String(readBytes);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }
