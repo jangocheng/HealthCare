@@ -12,7 +12,7 @@ import java.util.List;
 public class DBAdapter {
     private static final int TEST_USER_SELECT = 1;
     UserInfo user = new UserInfo();
-
+    Sipserver sip = new Sipserver();
     List<DataInfo> datalist = new ArrayList<DataInfo>();
 
 
@@ -181,6 +181,33 @@ public class DBAdapter {
         sqlthread.start();
     }//更新用户信息
 
+    public void updateusersip(final UserInfo info){
+        final Thread sqlthread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = null;
+                int u = 0;
+                conn =(Connection) DBOpenHelper.getConn();
+                String sql = "update userInfo set sipid=? where phone=?";
+                PreparedStatement pst;
+                try {
+                    pst = (PreparedStatement) conn.prepareStatement(sql);
+
+
+                    pst.setString(1,info.getSipid());
+                    pst.setString(2,info.getPhone());
+
+                    u = pst.executeUpdate();
+                    pst.close();
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        sqlthread.start();
+    }//更新用户信息
+
 
     public List<DataInfo> queryDataInfo(final String userId,final String dataType){
         //根据电话号码（主键）查询用户信息
@@ -304,5 +331,114 @@ public class DBAdapter {
 //        sqlthread.start();
 //    }
 
+    public Sipserver querySipserver(){
+        //根据电话号码（主键）查询用户信息
+        Thread sqlthread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = null;
+                conn =(Connection) DBOpenHelper.getConn();
+                String sql = "select * from sipserver where occupied = '0'" ;
+                Statement st;
+                try {
+                    st = (Statement) conn.createStatement();
+                    ResultSet rs = st.executeQuery(sql);
+                    while (rs.next()){
+                        //因为查出来的数据试剂盒的形式，所以我们新建一个javabean存储
+//                        DataInfo data = new DataInfo();
+//                        data.setUserId(rs.getString(1));
+//                        data.setCollectTime(rs.getTime(2));
+//                        data.setHealthData(rs.getString(3));
+//                        data.setDataType(rs.getString(4));
+//                        data.setExcp(rs.getInt(5));
+//                        data.setDataId(rs.getInt(6));
+//                        datalist.add(data);
 
+                        sip.setSipid(rs.getString(1));
+                        sip.setOccupied(rs.getInt(2));
+                    }
+                    st.close();
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        sqlthread.start();
+        try {
+            sqlthread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return sip;
+    }//查询健康数据
+
+
+    public Sipserver querySipserver(final String sipid){
+        //根据电话号码（主键）查询用户信息
+        Thread sqlthread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = null;
+                conn =(Connection) DBOpenHelper.getConn();
+                String sql = "select * from sipserver where sipid='"+sipid+"'" ;
+                Statement st;
+                try {
+                    st = (Statement) conn.createStatement();
+                    ResultSet rs = st.executeQuery(sql);
+                    while (rs.next()){
+                        //因为查出来的数据试剂盒的形式，所以我们新建一个javabean存储
+//                        DataInfo data = new DataInfo();
+//                        data.setUserId(rs.getString(1));
+//                        data.setCollectTime(rs.getTime(2));
+//                        data.setHealthData(rs.getString(3));
+//                        data.setDataType(rs.getString(4));
+//                        data.setExcp(rs.getInt(5));
+//                        data.setDataId(rs.getInt(6));
+//                        datalist.add(data);
+
+                        sip.setSipid(rs.getString(1));
+                        sip.setOccupied(rs.getInt(2));
+                    }
+                    st.close();
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        sqlthread.start();
+        try {
+            sqlthread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return sip;
+    }//查询健康数据
+    public void updatesip(final Sipserver sip){
+        final Thread sqlthread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = null;
+                int u = 0;
+                conn =(Connection) DBOpenHelper.getConn();
+                String sql = "update sipserver set occupied=? where sipid=?";
+                PreparedStatement pst;
+                try {
+                    pst = (PreparedStatement) conn.prepareStatement(sql);
+
+
+                    pst.setInt(1,sip.getOccupied());
+                    pst.setString(2,sip.getSipid());
+
+                    u = pst.executeUpdate();
+                    pst.close();
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        sqlthread.start();
+    }//更新用户信息
 }
