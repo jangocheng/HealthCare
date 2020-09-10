@@ -30,12 +30,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
+import bupt.mxly.healthcare.MainActivity;
 import bupt.mxly.healthcare.R;
 import bupt.mxly.healthcare.db.DBAdapter;
 import bupt.mxly.healthcare.db.UserInfo;
 import bupt.mxly.healthcare.sipchat.jsip_ua.SipProfile;
 import bupt.mxly.healthcare.sipchat.jsip_ua.impl.DeviceImpl;
 import bupt.mxly.healthcare.sipchat.jsip_ua.impl.MessageProcessor;
+
+import static bupt.mxly.healthcare.ModifyUI.setStatusBar;
 
 
 //import bupt.mxly.healthcare.sipchat.jsip_ua.SipProfile;
@@ -61,6 +64,7 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 	private String userPhone = null;
 	private UserInfo user= null;
 	private UserInfo guardian = null;
+	private Button btn_back;
 	DeviceImpl device;
 	ArrayAdapter<String> pairedDevicesArrayAdapter = null;
 	@Override
@@ -72,9 +76,16 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
         customHeaders.put("customHeader1","customValue1");
         customHeaders.put("customHeader2","customValue2");
         DeviceImpl.getInstance().Initialize(getApplicationContext(), sipProfile,customHeaders);//单例模式创建DeviceImpl的实例
-		//////
-		Button btnRegister = (Button)findViewById(R.id.btnSubmit);
-		Button tosetting = (Button)findViewById(R.id.tosetting);
+		setStatusBar(ChatActivity.this, true, true);
+
+		btn_back = findViewById(R.id.btn_back);
+		btn_back.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+			}
+		});
+
 		try {
 			loadPreferencesFile();
 		} catch (IOException e) {
@@ -96,24 +107,21 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 		System.out.println("信息接收人"+guardian.getPhone());
 
 
-		tosetting.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Intent intent=new Intent(ChatActivity.this, SettingsActivity.class);
-				//startActivity(intent);
-				//intent.putExtra("data",userInfo.getPhone());
-				//startActivityForResult(intent,3);
-				startActivity(intent);
+//		tosetting.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				Intent intent=new Intent(ChatActivity.this, SettingsActivity.class);
+//				//startActivity(intent);
+//				//intent.putExtra("data",userInfo.getPhone());
+//				//startActivityForResult(intent,3);
+//				startActivity(intent);
+//
+//			}
+//		});
 
-			}
-		});
-		btnRegister.setOnClickListener(this);
 		Button btnSend = (Button) findViewById(R.id.btnSend);
 		btnSend.setOnClickListener(this);
-		Button btnCall = (Button) findViewById(R.id.btnCall);
-		btnCall.setOnClickListener(this);
 		textlayout=(LinearLayout)findViewById(R.id.textLayout);
-		editTextTo = (EditText) findViewById(R.id.editTextTo);
 		editTextMessage = (EditText) findViewById(R.id.editTextMessage);
 		textViewChat = (TextView) findViewById(R.id.textViewChat);
 		textViewChat.setMovementMethod(new ScrollingMovementMethod());
@@ -124,14 +132,6 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 
 		pairedDevicesArrayAdapter =
 				new ArrayAdapter<String>(this, R.layout.record);
-
-
-
-		// Find and set up the ListView for paired devices
-		ListView pairedListView = (ListView) findViewById(R.id.chatrecord);
-		pairedListView.setDivider(null);
-		pairedListView.setAdapter(pairedDevicesArrayAdapter);
-
 
 		// register preference change listener
 		prefs.registerOnSharedPreferenceChangeListener(this);
@@ -172,14 +172,6 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case (R.id.btnSubmit):
-			DeviceImpl.getInstance().Register();
-			break;
-		case (R.id.btnCall):
-
-			DeviceImpl.getInstance().Call(editTextTo.getText().toString());
-		
-			break;
 		case (R.id.btnSend):
 
 //			DeviceImpl.getInstance().SendMessage(editTextTo.getText().toString(), editTextMessage.getText().toString() );
@@ -292,7 +284,7 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 //		TextView child = new TextView(this);
 //		child.setText("收到消息： "+message);
 //		textlayout.addView(child);
-		textViewChat.append("对方\n"+message+"\n");
+		textViewChat.append("对方:\n"+message+"\n");
 	}
 
 	@Override

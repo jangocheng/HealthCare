@@ -1,19 +1,31 @@
 package bupt.mxly.healthcare.ui.contact;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import bupt.mxly.healthcare.MainActivity;
 import bupt.mxly.healthcare.R;
 import bupt.mxly.healthcare.sipchat.ChatActivity;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ContactFragment extends Fragment {
 
     private ContactViewModel contactViewModel;
@@ -29,6 +41,35 @@ public class ContactFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent110 = new Intent(Intent.ACTION_DIAL);
                 Uri data1 = Uri.parse("tel:110");
+                String id = "channel_01";
+                // 发送通知
+                NotificationManager notificationManager =
+                        (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                //用户可以看到的通知渠道的名字
+                CharSequence name = "TimeMaster";
+                //用户可看到的通知描述
+                String description = "TimeMaster";
+                //构建NotificationChannel实例
+                NotificationChannel notificationChannel =
+                        new NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH);
+                //配置通知渠道的属性
+                notificationChannel.setDescription(description);
+                //在notificationManager中创建通知渠道
+                notificationManager.createNotificationChannel(notificationChannel);
+
+                Notification notification = new NotificationCompat.Builder(getActivity(), id)
+                        //指定通知的标题内容
+                        .setContentTitle("老人健康预警")
+                        //设置通知的内容
+                        .setContentText("血糖高于8mmol/g！")
+                        .setSmallIcon(R.drawable.ic_baseline_lock_24)
+                        //指定通知被创建的时间
+                        .setWhen(System.currentTimeMillis())
+                        .build();
+
+                notificationManager.notify(1, notification);
+
                 intent110.setData(data1);
                 startActivity(intent110);
             }
@@ -67,4 +108,5 @@ public class ContactFragment extends Fragment {
         });
         return root;
     }
+
 }

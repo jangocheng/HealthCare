@@ -117,7 +117,7 @@ public class AboutFragment extends Fragment {
         DBAdapter dbAdapter = new DBAdapter();
         if (!userPhone.isEmpty()) {
             username.setVisibility(getView().VISIBLE);
-            username.setText("欢迎您: " + dbAdapter.queryUserInfo(userPhone).getName());
+            username.setText(dbAdapter.queryUserInfo(userPhone).getName());
 //            tologin.setVisibility(getView().GONE);
 //            toregister.setVisibility(getView().GONE);
             logout.setVisibility(getView().VISIBLE);
