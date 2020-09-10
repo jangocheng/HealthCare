@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 
+import bupt.mxly.healthcare.connect.WiFiServiceDiscoveryActivity;
 import bupt.mxly.healthcare.connect.connViaBluetooth;
 
 import static bupt.mxly.healthcare.ModifyUI.setFitSystemWindow;
@@ -70,6 +71,7 @@ public class addDevice extends AppCompatActivity {
 
     Button btn_back;
     MaterialCardView btn_blt;
+    MaterialCardView btn_wifi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,5 +102,19 @@ public class addDevice extends AppCompatActivity {
                 }
             }
         });
+
+        btn_wifi = findViewById(R.id.wifi);
+        btn_wifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(addDevice.this, WiFiServiceDiscoveryActivity.class);
+                    addDevice.this.startActivity(intent);
+                } catch (Exception ex) {
+                    Toast.makeText(addDevice.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 }
