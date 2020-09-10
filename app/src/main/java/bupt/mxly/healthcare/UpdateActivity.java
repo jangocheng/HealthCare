@@ -61,7 +61,8 @@ public class UpdateActivity extends AppCompatActivity {
         setFitSystemWindow(true, UpdateActivity.this);
         setStatusBarLightMode(this, true);
 
-        phone = getIntent().getStringExtra("data");
+
+
 
     }
 
@@ -77,6 +78,19 @@ public class UpdateActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        UserInfo defaultinfo = new UserInfo();
+        DBAdapter dba=new DBAdapter();
+        defaultinfo = dba.queryUserInfo(userPhone);
+        nametoinsert.setText(defaultinfo.getName());
+        agetoinsert.setText(String.valueOf(defaultinfo.getAge()));
+        heightroinsert.setText(String.valueOf(defaultinfo.getHeight()));
+        weighttoinsert.setText(String.valueOf(defaultinfo.getWeight()));
+        sextoinsert.setText(defaultinfo.getSex());
+        bloodtoinsert.setText(defaultinfo.getBlood());
+        historytoinsert.setText(defaultinfo.getHistory());
+        addresstoinsert.setText(defaultinfo.getAddress());
+        guardiantoinsert.setText(defaultinfo.getGuardian());
+        
         insertbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,7 +109,7 @@ public class UpdateActivity extends AppCompatActivity {
                     info.setBlood(bloodtoinsert.getText().toString());
                     info.setHistory(historytoinsert.getText().toString());
                     info.setAddress(addresstoinsert.getText().toString());
-
+                    info.setGuardian(guardiantoinsert.getText().toString());
                     db.updateUserInfo(info);
 
                     Intent intent=new Intent(UpdateActivity.this, MainActivity.class);
