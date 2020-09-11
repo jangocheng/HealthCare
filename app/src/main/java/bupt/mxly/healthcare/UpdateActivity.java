@@ -46,6 +46,7 @@ public class UpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update);
+
         insertbutton = findViewById(R.id.bt_insert);
         pwdtoinsert = findViewById(R.id.pwdtoinsert);
         pwdtoverify=findViewById(R.id.pwdtoverify);
@@ -87,7 +88,7 @@ public class UpdateActivity extends AppCompatActivity {
         historytoinsert.setText(defaultinfo.getHistory());
         addresstoinsert.setText(defaultinfo.getAddress());
         guardiantoinsert.setText(defaultinfo.getGuardian());
-        
+
         insertbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

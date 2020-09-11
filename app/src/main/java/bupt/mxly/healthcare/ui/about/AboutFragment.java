@@ -137,18 +137,18 @@ public class AboutFragment extends Fragment {
         DBAdapter dbAdapter = new DBAdapter();
         if (!userPhone.isEmpty()) {
             username.setVisibility(getView().VISIBLE);
-            username.setText(dbAdapter.queryUserInfo(userPhone).getName());
+//            username.setText(dbAdapter.queryUserInfo(userPhone).getName());
 //            tologin.setVisibility(getView().GONE);
 //            toregister.setVisibility(getView().GONE);
             logout.setVisibility(getView().VISIBLE);
             inforlayout.setVisibility(getView().VISIBLE);
-            showage.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getAge()));
-            showheight.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getHeight()));
-            showweight.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getWeight()));
-            showsex.setText(dbAdapter.queryUserInfo(userPhone).getSex());
-            showblood.setText(dbAdapter.queryUserInfo(userPhone).getBlood());
-            showhistory.setText(dbAdapter.queryUserInfo(userPhone).getHistory());
-            showaddress.setText(dbAdapter.queryUserInfo(userPhone).getAddress());
+//            showage.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getAge()));
+//            showheight.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getHeight()));
+//            showweight.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getWeight()));
+//            showsex.setText(dbAdapter.queryUserInfo(userPhone).getSex());
+//            showblood.setText(dbAdapter.queryUserInfo(userPhone).getBlood());
+//            showhistory.setText(dbAdapter.queryUserInfo(userPhone).getHistory());
+//            showaddress.setText(dbAdapter.queryUserInfo(userPhone).getAddress());
         }
 
 
@@ -159,6 +159,16 @@ public class AboutFragment extends Fragment {
     public void onStart() {
 
         super.onStart();
+        DBAdapter dbAdapter = new DBAdapter();
+        username.setText(dbAdapter.queryUserInfo(userPhone).getName());
+        username.setText(dbAdapter.queryUserInfo(userPhone).getName());
+        showage.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getAge()));
+        showheight.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getHeight()));
+        showweight.setText(String.valueOf(dbAdapter.queryUserInfo(userPhone).getWeight()));
+        showsex.setText(dbAdapter.queryUserInfo(userPhone).getSex());
+        showblood.setText(dbAdapter.queryUserInfo(userPhone).getBlood());
+        showhistory.setText(dbAdapter.queryUserInfo(userPhone).getHistory());
+        showaddress.setText(dbAdapter.queryUserInfo(userPhone).getAddress());
     }
 
     @SuppressLint("WrongConstant")
