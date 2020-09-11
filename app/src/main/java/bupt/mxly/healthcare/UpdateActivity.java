@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,19 +26,19 @@ import static bupt.mxly.healthcare.ModifyUI.setStatusBarLightMode;
 
 public class UpdateActivity extends AppCompatActivity {
     private Button insertbutton;
-    private EditText phonetoinsert;
-    private EditText pwdtoinsert;
-    private EditText pwdtoverify;
-    private EditText nametoinsert;
-    private EditText agetoinsert;
-    private EditText heightroinsert;
-    private EditText weighttoinsert;
-    private EditText sextoinsert;
-    private EditText bloodtoinsert;
-    private EditText historytoinsert;
-    private EditText addresstoinsert;
-    private EditText guardiantoinsert;
+    private TextInputEditText pwdtoinsert;
+    private TextInputEditText pwdtoverify;
+    private TextInputEditText nametoinsert;
+    private TextInputEditText agetoinsert;
+    private TextInputEditText heightroinsert;
+    private TextInputEditText weighttoinsert;
+
+    private TextInputEditText bloodtoinsert;
+    private TextInputEditText historytoinsert;
+    private TextInputEditText addresstoinsert;
+    private TextInputEditText guardiantoinsert;
     String phone;
+    UserInfo defaultinfo = new UserInfo();
 
     String userPhone = "";
     private final String FILE_NAME = "config.ini";
@@ -43,26 +46,21 @@ public class UpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update);
-        insertbutton = (Button)findViewById(R.id.bt_insert);
-        phonetoinsert = (EditText) findViewById(R.id.phonetoinsert);
-        pwdtoinsert = (EditText) findViewById(R.id.pwdtoinsert);
-        pwdtoverify=(EditText)findViewById(R.id.pwdtoverify);
-        nametoinsert = (EditText) findViewById(R.id.nametoinsert);
-        agetoinsert = (EditText) findViewById(R.id.agetoinsert);
-        heightroinsert = (EditText) findViewById(R.id.heighttoinsert);
-        weighttoinsert = (EditText) findViewById(R.id.weighttoinsert);
-        sextoinsert = (EditText) findViewById(R.id.sextoinsert);
-        bloodtoinsert = (EditText) findViewById(R.id.bloodtoinsert);
-        historytoinsert = (EditText) findViewById(R.id.historytoinsert);
-        addresstoinsert = (EditText) findViewById(R.id.addresstoinsert);
-        guardiantoinsert = (EditText) findViewById(R.id.guardiantoinsert);
+        insertbutton = findViewById(R.id.bt_insert);
+        pwdtoinsert = findViewById(R.id.pwdtoinsert);
+        pwdtoverify=findViewById(R.id.pwdtoverify);
+        nametoinsert = findViewById(R.id.nametoinsert);
+        agetoinsert = findViewById(R.id.agetoinsert);
+        heightroinsert = findViewById(R.id.heighttoinsert);
+        weighttoinsert = findViewById(R.id.weighttoinsert);
+        bloodtoinsert = findViewById(R.id.bloodtoinsert);
+        historytoinsert = findViewById(R.id.historytoinsert);
+        addresstoinsert = findViewById(R.id.addresstoinsert);
+        guardiantoinsert = findViewById(R.id.guardiantoinsert);
 
         setStatusBarFullTransparent(UpdateActivity.this);
         setFitSystemWindow(true, UpdateActivity.this);
         setStatusBarLightMode(this, true);
-
-
-
 
     }
 
@@ -78,14 +76,13 @@ public class UpdateActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        UserInfo defaultinfo = new UserInfo();
+
         DBAdapter dba=new DBAdapter();
         defaultinfo = dba.queryUserInfo(userPhone);
         nametoinsert.setText(defaultinfo.getName());
         agetoinsert.setText(String.valueOf(defaultinfo.getAge()));
         heightroinsert.setText(String.valueOf(defaultinfo.getHeight()));
         weighttoinsert.setText(String.valueOf(defaultinfo.getWeight()));
-        sextoinsert.setText(defaultinfo.getSex());
         bloodtoinsert.setText(defaultinfo.getBlood());
         historytoinsert.setText(defaultinfo.getHistory());
         addresstoinsert.setText(defaultinfo.getAddress());
@@ -105,7 +102,7 @@ public class UpdateActivity extends AppCompatActivity {
                     info.setAge(Integer.parseInt(agetoinsert.getText().toString()));
                     info.setHeight(Double.parseDouble(heightroinsert.getText().toString()));
                     info.setWeight(Double.parseDouble(weighttoinsert.getText().toString()));
-                    info.setSex(sextoinsert.getText().toString());
+                    info.setSex(defaultinfo.getSex());
                     info.setBlood(bloodtoinsert.getText().toString());
                     info.setHistory(historytoinsert.getText().toString());
                     info.setAddress(addresstoinsert.getText().toString());

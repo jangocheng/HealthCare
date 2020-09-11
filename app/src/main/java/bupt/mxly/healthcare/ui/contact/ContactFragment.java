@@ -59,7 +59,7 @@ public class ContactFragment extends Fragment {
                         //指定通知的标题内容
                         .setContentTitle("老人健康预警")
                         //设置通知的内容
-                        .setContentText("血糖高于8mmol/g！")
+                        .setContentText("老人拨打了110！")
                         .setSmallIcon(R.drawable.ic_baseline_lock_24)
                         //指定通知被创建的时间
                         .setWhen(System.currentTimeMillis())
@@ -95,10 +95,6 @@ public class ContactFragment extends Fragment {
         root.findViewById(R.id.btn_call_child).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent_elder = new Intent(Intent.ACTION_DIAL);
-//                Uri data4 = Uri.parse("tel:18810059259");
-//                intent_elder.setData(data4);
-//                startActivity(intent_elder);
                 Intent i = new Intent(getActivity(), ChatActivity.class);
                 startActivity(i);
             }
