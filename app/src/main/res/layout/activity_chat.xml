@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="联系子女"
+            android:text="联系亲人"
             android:textColor="#000000"
             android:textSize="40sp"
             app:layout_constraintStart_toStartOf="parent"

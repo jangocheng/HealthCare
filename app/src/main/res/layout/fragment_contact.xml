@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:padding="16dp"
-                    android:text="联系子女"
+                    android:text="联系亲人"
                     android:textColor="@color/colorButtom"
                     android:textSize="20sp" />
 

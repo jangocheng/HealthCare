@@ -253,6 +253,7 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 		System.out.println(message);
 
 		textViewChat.append(guardian.getName()+" "+sd+":\n"+message);
+
 	}
 
 	@Override
