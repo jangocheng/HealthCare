@@ -26,6 +26,7 @@ import static bupt.mxly.healthcare.ModifyUI.setStatusBarLightMode;
 
 public class UpdateActivity extends AppCompatActivity {
     private Button insertbutton;
+    private Button back;
     private TextInputEditText pwdtoinsert;
     private TextInputEditText pwdtoverify;
     private TextInputEditText nametoinsert;
@@ -46,7 +47,7 @@ public class UpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update);
-
+        back = findViewById(R.id.btn_back);
         insertbutton = findViewById(R.id.bt_insert);
         pwdtoinsert = findViewById(R.id.pwdtoinsert);
         pwdtoverify=findViewById(R.id.pwdtoverify);
@@ -58,6 +59,13 @@ public class UpdateActivity extends AppCompatActivity {
         historytoinsert = findViewById(R.id.historytoinsert);
         addresstoinsert = findViewById(R.id.addresstoinsert);
         guardiantoinsert = findViewById(R.id.guardiantoinsert);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         setStatusBarFullTransparent(UpdateActivity.this);
         setFitSystemWindow(true, UpdateActivity.this);

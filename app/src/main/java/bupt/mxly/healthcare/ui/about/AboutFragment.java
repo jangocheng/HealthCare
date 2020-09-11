@@ -68,29 +68,9 @@ public class AboutFragment extends Fragment {
         showblood = (TextView) root.findViewById(R.id.showblood);
         showhistory = (TextView) root.findViewById(R.id.showhisrory);
         showaddress = (TextView) root.findViewById(R.id.showaddress);
-         toupdate=(MaterialCardView)root.findViewById(R.id.bt_update);
-        //toinformation=(Button)root.findViewById(R.id.bt_toinformation);
-//        toregister = (Button) root.findViewById(R.id.bt_toregister);
-//        tologin = (Button) root.findViewById(R.id.bt_tologin);
+        toupdate=(MaterialCardView)root.findViewById(R.id.bt_update);
         logout = (MaterialCardView) root.findViewById(R.id.bt_logout);
-//        tologin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Intent intent = new Intent(getActivity(), LoginActivity.class);
-//                //startActivity(intent);
-//                startActivityForResult(intent, 1);
-//            }
-//        });
-//        toregister.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Intent intent = new Intent(getActivity(), RegisterActivity.class);
-//                //startActivity(intent);
-//                startActivityForResult(intent, 2);
-//            }
-//        });
+
         toupdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
