@@ -43,6 +43,7 @@ public class UpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update);
+
         insertbutton = (Button)findViewById(R.id.bt_insert);
         phonetoinsert = (EditText) findViewById(R.id.phonetoinsert);
         pwdtoinsert = (EditText) findViewById(R.id.pwdtoinsert);
@@ -90,7 +91,7 @@ public class UpdateActivity extends AppCompatActivity {
         historytoinsert.setText(defaultinfo.getHistory());
         addresstoinsert.setText(defaultinfo.getAddress());
         guardiantoinsert.setText(defaultinfo.getGuardian());
-        
+
         insertbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -27,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import bupt.mxly.healthcare.R;
@@ -39,14 +41,10 @@ import bupt.mxly.healthcare.sipchat.jsip_ua.impl.MessageProcessor;
 import static bupt.mxly.healthcare.ModifyUI.setStatusBar;
 
 
-//import bupt.mxly.healthcare.sipchat.jsip_ua.SipProfile;
-//import bupt.jsip_demo.R;
-//import sipchat.jsip_ua.SipProfile;
-//import jsip_ua.impl.DeviceImpl;
-//import jsip_ua.impl.MessageProcessor;
 
 public class ChatActivity extends AppCompatActivity implements OnClickListener,
 		OnSharedPreferenceChangeListener, MessageProcessor {
+	public static String serverip="10.128.206.204";
 	SharedPreferences prefs;
 	Button btnSubmit;
 	Button tosetting;
@@ -105,17 +103,6 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 		System.out.println("信息接收人"+guardian.getPhone());
 
 
-//		tosetting.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View view) {
-//				Intent intent=new Intent(ChatActivity.this, SettingsActivity.class);
-//				//startActivity(intent);
-//				//intent.putExtra("data",userInfo.getPhone());
-//				//startActivityForResult(intent,3);
-//				startActivity(intent);
-//
-//			}
-//		});
 
 		Button btnSend = (Button) findViewById(R.id.btnSend);
 		btnSend.setOnClickListener(this);
@@ -172,17 +159,16 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 		switch (v.getId()) {
 		case (R.id.btnSend):
 
-//			DeviceImpl.getInstance().SendMessage(editTextTo.getText().toString(), editTextMessage.getText().toString() );
+			Date date = new Date();
+			String timeStamp = String.valueOf(date.getTime());
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String sd = sdf.format(new Date(Long.parseLong(String.valueOf(timeStamp))));      // 时间戳转换成时间
 			System.out.println("sip:"+guardian.getSipid()+"@"+guardian.getIp());
 			DeviceImpl.getInstance().SendMessage("sip:"+guardian.getSipid()+"@"+guardian.getIp(), editTextMessage.getText().toString() );
 			System.out.println("cyy:从发送信息的文本栏中获取的信息为"+editTextMessage.getText().toString());
-//			TextView child = new TextView(this);
-//			child.setText("发送： "+editTextMessage.getText().toString());
-//			textlayout.addView(child);
-			//textViewChat.setText("发送"+editTextMessage.getText().toString()+"\n"+editTextMessage.getText().toString());
-			textViewChat.append("我:\n"+editTextMessage.getText().toString()+"\n");
-//			pairedDevicesArrayAdapter.add("发送"+editTextMessage.getText().toString());
-			//System.out.println(getLocalIpAddress(ChatActivity.this));
+
+			textViewChat.append(user.getName()+" "+sd+":\n"+editTextMessage.getText().toString()+"\n");
+
 			break;
 		}
 	}
@@ -228,7 +214,7 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 			int i = wifiInfo.getIpAddress();
 			return int2ip(i);
 		} catch (Exception ex) {
-			return " 获取IP出错鸟!!!!请保证是WIFI,或者请重新打开网络!\n" + ex.getMessage();
+			return " 获取IP出错!!!!请保证是WIFI,或者请重新打开网络!\n" + ex.getMessage();
 		}
 		// return null;
 	}
@@ -237,19 +223,12 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		if (key.equals("pref_proxy_ip")) {
-//			sipProfile.setRemoteIp((prefs.getString("pref_proxy_ip", "")));
 			sipProfile.setRemoteIp("10.128.206.204");
 		} else if (key.equals("pref_proxy_port")) {
-//			sipProfile.setRemotePort(Integer.parseInt(prefs.getString(
-//					"pref_proxy_port", "5060")));
 			sipProfile.setRemotePort(5060);
 		}  else if (key.equals("pref_sip_user")) {
-//			sipProfile.setSipUserName(prefs.getString("pref_sip_user",
-//					"alice"));
 			sipProfile.setSipUserName(user.getSipid());
 		} else if (key.equals("pref_sip_password")) {
-//			sipProfile.setSipPassword(prefs.getString("pref_sip_password",
-//					"1234"));
 			sipProfile.setSipPassword("100");
 		}
 
@@ -257,32 +236,23 @@ public class ChatActivity extends AppCompatActivity implements OnClickListener,
 
 	@SuppressWarnings("static-access")
 	private void initializeSipFromPreferences() {
-//		sipProfile.setRemoteIp((prefs.getString("pref_proxy_ip", "")));
 		sipProfile.setRemoteIp("10.128.206.204");
-//		sipProfile.setRemotePort(Integer.parseInt(prefs.getString(
-//				"pref_proxy_port", "5060")));
 		sipProfile.setRemotePort(5060);
-//		sipProfile.setSipUserName(prefs.getString("pref_sip_user", "alice"));
 		sipProfile.setSipUserName(user.getSipid());
-		System.out.println("ffffffff"+user.getSipid());
-//		sipProfile.setSipPassword(prefs
-//				.getString("pref_sip_password", "1234"));
 		sipProfile.setSipPassword("100");
 
 	}
 
 	@Override
 	public void processWhisperMessage(String sender, String message) {
-
+		Date date = new Date();
+		String timeStamp = String.valueOf(date.getTime());
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String sd = sdf.format(new Date(Long.parseLong(String.valueOf(timeStamp))));      // 时间戳转换成时间
 		System.out.println("cyy:activity receive message");
 		System.out.println(message);
-//		pairedDevicesArrayAdapter.add("接受"+message);
-//		pairedDevicesArrayAdapter.notifyDataSetChanged();
 
-//		TextView child = new TextView(this);
-//		child.setText("收到消息： "+message);
-//		textlayout.addView(child);
-		textViewChat.append("对方:\n"+message+"\n");
+		textViewChat.append(guardian.getName()+" "+sd+":\n"+message);
 	}
 
 	@Override
